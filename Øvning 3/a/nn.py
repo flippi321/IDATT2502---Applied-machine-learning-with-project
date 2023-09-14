@@ -21,6 +21,7 @@ x_test = (x_test - mean) / std
 
 # Divide training data into batches to speed up optimization
 batches = 600
+steps = 20
 x_train_batches = torch.split(x_train, batches)
 y_train_batches = torch.split(y_train, batches)
 
@@ -31,14 +32,22 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
         super(ConvolutionalNeuralNetworkModel, self).__init__()
 
         # Model layers (includes initialized model variables):
-        self.conv = nn.Conv2d(1, 32, kernel_size=5, padding=2)
-        self.pool = nn.MaxPool2d(kernel_size=2)
-        self.dense = nn.Linear(32 * 14 * 14, 10)
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=5, padding=2)
+        self.pool1 = nn.MaxPool2d(kernel_size=2)
+        
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=5, padding=2)  
+        self.pool2 = nn.MaxPool2d(kernel_size=2) 
+        
+        self.dense = nn.Linear(64 * 7 * 7, 10)
 
     def logits(self, x):
-        x = self.conv(x)
-        x = self.pool(x)
-        return self.dense(x.reshape(-1, 32 * 14 * 14))
+        x = self.conv1(x)
+        x = self.pool1(x)
+        
+        x = self.conv2(x)
+        x = self.pool2(x)
+        
+        return self.dense(x.reshape(-1, 64 * 7 * 7))
 
     # Predictor
     def f(self, x):
@@ -57,10 +66,14 @@ model = ConvolutionalNeuralNetworkModel()
 
 # Optimize: adjust W and b to minimize loss using stochastic gradient descent
 optimizer = torch.optim.Adam(model.parameters(), 0.001)
-for epoch in range(20):
+
+print(f"The program has {steps} steps of improvement. Their accuracy values are:")
+for epoch in range(steps):
     for batch in range(len(x_train_batches)):
         model.loss(x_train_batches[batch], y_train_batches[batch]).backward()  # Compute loss gradients
         optimizer.step()  # Perform optimization by adjusting W and b,
         optimizer.zero_grad()  # Clear gradients for next step
 
-    print("accuracy = %s" % model.accuracy(x_test, y_test))
+    print(f"{(epoch+1):02}: {model.accuracy(x_test, y_test):.04f}")
+
+print("Program done :-D")
