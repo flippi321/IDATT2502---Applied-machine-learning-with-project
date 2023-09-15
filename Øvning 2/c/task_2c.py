@@ -11,36 +11,45 @@ data = pd.read_csv('Øvning 2/c/data.csv', sep=',', header=0)
 x_train = torch.tensor(data[['X1', 'X2']].values, dtype=torch.float32)
 y_train = torch.tensor(data['Y'].values, dtype=torch.float32).reshape(-1, 1)
 
+
+
 # Create a model for logistic regression
 class LogisticRegressionModel:
     def __init__(self):
-        self.W = torch.rand((2, 1), requires_grad=True, dtype=torch.float32)
-        self.b = torch.rand((1,), requires_grad=True, dtype=torch.float32)
+        self.W1 = torch.rand((2, 1), requires_grad=True, dtype=torch.float32)
+        self.W2 = torch.rand((2, 1), requires_grad=True, dtype=torch.float32)
+        self.b1 = torch.rand((1,), requires_grad=True, dtype=torch.float32)
+        self.b2 = torch.rand((1,), requires_grad=True, dtype=torch.float32)
 
-    def logits(self, x):
-        return x @ self.W + self.b
+    def layer1(self, x):
+        return x @ self.W1 + self.b1
+
+    def layer2(self, x):
+        return x @ self.W2 + self.b2
 
     # Predictor
     def f(self, x):
-        return torch.sigmoid(self.logits(x))
+        return self.layer2(torch.sigmoid(self.layer1(x)))
 
     # Cross Entropy loss
     def loss(self, x, y):
-        return torch.nn.functional.binary_cross_entropy_with_logits(self.logits(x), y)
+        return torch.nn.functional.binary_cross_entropy_with_logits(self.f(x), y)
 
 model = LogisticRegressionModel()
 epochs = 100000
-learning_rate = 1e-3
+learning_rate = 1e-1
 
 # Optimize: adjust W and b to minimize loss using stochastic gradient descent
-optimizer = torch.optim.SGD([model.W, model.b], lr=learning_rate)
+optimizer = torch.optim.SGD([model.W1, model.W2, model.b1, model.b2], lr=learning_rate)
 
 for epoch in range(epochs):
     if epoch % 5000 == 0:
         print(f"Epoch: {epoch}")
-        print(f"W = {model.W.tolist()}")
-        print(f"b = {model.b.tolist()}")
-        print(f"loss = {model.loss(x_train, y_train)}")
+        print(f"W1 = {model.W1[:, 0]}")
+        print(f"W2 = {model.W2[:, 0]}")
+        print(f"b1 = {round(model.b1.item(), 3)}")
+        print(f"b2 = {round(model.b2.item(), 3)}")
+        print(f"loss = {round(model.loss(x_train, y_train).item(), 6)}")
         print("------------------------------")
 
     model.loss(x_train, y_train).backward()  # Compute loss gradients
