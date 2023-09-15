@@ -21,7 +21,7 @@ x_test = (x_test - mean) / std
 
 # Divide training data into batches to speed up optimization
 batches = 600
-steps = 20
+steps = 10
 x_train_batches = torch.split(x_train, batches)
 y_train_batches = torch.split(y_train, batches)
 
