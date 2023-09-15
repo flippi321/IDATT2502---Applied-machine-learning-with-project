@@ -54,8 +54,9 @@ optimizer = torch.optim.SGD([model.W, model.b], lr=learning_rate)
 print("------------------------------")
 for epoch in range(epochs):
     if epoch % 100 == 0:
-        print(f"Epoch: {epoch}")
-        print(f"loss = {model.loss(x_train, y_train)}")
+        print(f"Epoch:     {epoch}")
+        print(f"loss =     {model.loss(x_train, y_train)}")
+        print(f"accuracy = {model.loss(x_train, y_train)}")
         print("------------------------------")
 
     model.loss(x_train, y_train).backward()  # Compute loss gradients
