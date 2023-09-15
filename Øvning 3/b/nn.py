@@ -38,8 +38,9 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
         self.conv2 = nn.Conv2d(32, 64, kernel_size=5, padding=2)  
         self.pool2 = nn.MaxPool2d(kernel_size=2) 
         
-        self.dense1 = nn.Linear(64 * 7 * 7, 10)
-        self.dense2 = nn.Linear(1 * 1024, 1)
+        self.dense1 = nn.Linear(64 * 7 * 7, 1024)
+        self.dense2 = nn.Linear(1024, 10)
+
 
     def logits(self, x):
         x = self.conv1(x)
@@ -49,7 +50,8 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
         x = self.pool2(x)
 
         x = self.dense1(x.reshape(-1, 64 * 7 * 7))
-        x = self.dense2(x.reshape(-1, 1 * 1024))
+        x = self.dense2(x)
+        
         return x
 
     # Predictor
