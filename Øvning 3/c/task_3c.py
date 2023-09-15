@@ -26,7 +26,6 @@ steps = 20
 x_train_batches = torch.split(x_train, batches)
 y_train_batches = torch.split(y_train, batches)
 
-
 class ConvolutionalNeuralNetworkModel(nn.Module):
 
     def __init__(self):
@@ -54,7 +53,6 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
     
         return x
 
-
     # Predictor
     def f(self, x):
         return torch.softmax(self.logits(x), dim=1)
@@ -66,8 +64,6 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
     # Accuracy
     def accuracy(self, x, y):
         return torch.mean(torch.eq(self.f(x).argmax(1), y.argmax(1)).float())
-
-
 
 model = ConvolutionalNeuralNetworkModel()
 
