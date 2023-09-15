@@ -21,9 +21,9 @@ std = x_train.std()
 x_train = (x_train - mean) / std
 x_test = (x_test - mean) / std
 
-# While the test set is of the size 60K
+# While the test set is of the size 60K, I only go trough a fraction of this
 batches = 600
-steps = 10
+steps = 20
 x_train_batches = torch.split(x_train, batches)
 y_train_batches = torch.split(y_train, batches)
 
@@ -84,19 +84,22 @@ for epoch in range(steps):
         optimizer.zero_grad()  # Clear gradients for next step
 
     print(f"{(epoch+1):02}: {model.accuracy(x_test, y_test):.04f}")
+print("Program done :-D\n\n")
 
 # TODO REMOVE
-for i in range (5):
+for i in range(5):
     plt.imshow(x_test[i, :].reshape(28, 28))
 
     # Print the classification of the observation in the training set
     print(f"For test set value {i}")
-    print(f"We got:       {model.f(x_test[i, :].unsqueeze(0))[0].tolist()}")
-    print(f"and expected: {y_test[i, :].tolist()}")
+
+    # Rounding the model's prediction to the 4th digit
+    rounded_prediction = [round(x, 4) for x in model.f(x_test[i, :].unsqueeze(0))[0].tolist()]
+    print(f"We got:       {rounded_prediction}")
+
+    # Rounding the actual data to the 4th digit
+    rounded_actual = [round(x, 4) for x in y_test[i, :].tolist()]
+    print(f"and expected: {rounded_actual}")
+
     print("-----------------------------------------------------------")
-
-    # Save the input of the observation in the training set
-    #plt.imsave(f'x_train_{i}.png', x_train[i, :].reshape(28, 28))    
     plt.show()
-
-print("Program done :-D")
