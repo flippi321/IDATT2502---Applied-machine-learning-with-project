@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -20,7 +21,7 @@ std = x_train.std()
 x_train = (x_train - mean) / std
 x_test = (x_test - mean) / std
 
-# Divide training data into batches to speed up optimization
+# While the test set is of the size 60K
 batches = 600
 steps = 10
 x_train_batches = torch.split(x_train, batches)
@@ -83,5 +84,19 @@ for epoch in range(steps):
         optimizer.zero_grad()  # Clear gradients for next step
 
     print(f"{(epoch+1):02}: {model.accuracy(x_test, y_test):.04f}")
+
+# TODO REMOVE
+for i in range (5):
+    plt.imshow(x_test[i, :].reshape(28, 28))
+
+    # Print the classification of the observation in the training set
+    print(f"For test set value {i}")
+    print(f"We got:       {model.f(x_test[i, :].unsqueeze(0))[0].tolist()}")
+    print(f"and expected: {y_test[i, :].tolist()}")
+    print("-----------------------------------------------------------")
+
+    # Save the input of the observation in the training set
+    #plt.imsave(f'x_train_{i}.png', x_train[i, :].reshape(28, 28))    
+    plt.show()
 
 print("Program done :-D")
