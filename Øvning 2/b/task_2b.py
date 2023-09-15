@@ -7,7 +7,7 @@ import torch
 matplotlib.rcParams.update({'font.size': 11})
 
 # Read data from csv file and save as torch tensors with 32-bit floats
-data = pd.read_csv('Øvning2/b/data.csv', sep=',', header=0)
+data = pd.read_csv('Øvning 2/b/data.csv', sep=',', header=0)
 x_train = torch.tensor(data[['X1', 'X2']].values, dtype=torch.float32)
 y_train = torch.tensor(data['Y'].values, dtype=torch.float32).reshape(-1, 1)
 
