@@ -27,24 +27,27 @@ class LongShortTermMemoryModel(nn.Module):
 
 
 char_encodings = [
-    [1., 0., 0., 0., 0.],  # ' '
-    [0., 1., 0., 0., 0.],  # 'h'
-    [0., 0., 1., 0., 0.],  # 'e'
-    [0., 0., 0., 1., 0.],  # 'l'
-    [0., 0., 0., 0., 1.],  # 'o'
+    [1., 0., 0., 0., 0., 0., 0., 0.,],  # 0: ' '
+    [0., 1., 0., 0., 0., 0., 0., 0.,],  # 1: 'h'
+    [0., 0., 1., 0., 0., 0., 0., 0.,],  # 2: 'e'
+    [0., 0., 0., 1., 0., 0., 0., 0.,],  # 3: 'l'
+    [0., 0., 0., 0., 1., 0., 0., 0.,],  # 4: 'o'
+    [0., 0., 0., 0., 0., 1., 0., 0.,],  # 5: 'w'
+    [0., 0., 0., 0., 0., 0., 1., 0.,],  # 6: 'r'
+    [0., 0., 0., 0., 0., 0., 0., 1.,],  # 7: 'd'
 ]
 encoding_size = len(char_encodings)
 
-index_to_char = [' ', 'h', 'e', 'l', 'o']
+index_to_char = [' ', 'h', 'e', 'l', 'o', 'w', 'r', 'd']
 
-x_train = torch.tensor([[char_encodings[0]], [char_encodings[1]], [char_encodings[2]], [char_encodings[3]], [char_encodings[3]],
-                        [char_encodings[4]]])  # ' hello'
-y_train = torch.tensor([char_encodings[1], char_encodings[2], char_encodings[3], char_encodings[3], char_encodings[4], char_encodings[0]])  # 'hello '
+x_train = torch.tensor([[char_encodings[0]], [char_encodings[1]], [char_encodings[2]], [char_encodings[3]], [char_encodings[3]], [char_encodings[4]],
+                         [char_encodings[0]], [char_encodings[5]], [char_encodings[4]], [char_encodings[6]], [char_encodings[3]], [char_encodings[7]]])  # ' hello world'
+y_train = torch.tensor([char_encodings[1], char_encodings[2], char_encodings[3], char_encodings[3], char_encodings[4], char_encodings[0], char_encodings[5], char_encodings[4], char_encodings[6], char_encodings[3], char_encodings[7], char_encodings[0]])  # 'hello world '
 
 model = LongShortTermMemoryModel(encoding_size)
 
 optimizer = torch.optim.RMSprop(model.parameters(), 0.001)
-for epoch in range(500):
+for epoch in range(1000):
     model.reset()
     model.loss(x_train, y_train).backward()
     optimizer.step()
