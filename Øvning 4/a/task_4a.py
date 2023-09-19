@@ -40,14 +40,15 @@ encoding_size = len(char_encodings)
 
 index_to_char = [' ', 'h', 'e', 'l', 'o', 'w', 'r', 'd']
 
-x_train = torch.tensor([[char_encodings[0]], [char_encodings[1]], [char_encodings[2]], [char_encodings[3]], [char_encodings[3]], [char_encodings[4]],
-                         [char_encodings[0]], [char_encodings[5]], [char_encodings[4]], [char_encodings[6]], [char_encodings[3]], [char_encodings[7]]])  # ' hello world'
-y_train = torch.tensor([char_encodings[1], char_encodings[2], char_encodings[3], char_encodings[3], char_encodings[4], char_encodings[0], char_encodings[5], char_encodings[4], char_encodings[6], char_encodings[3], char_encodings[7], char_encodings[0]])  # 'hello world '
+x_train = torch.tensor([[char_encodings[0]], [char_encodings[1]], [char_encodings[2]], [char_encodings[3]], [char_encodings[3]], [char_encodings[4]], [char_encodings[0]], 
+                        [char_encodings[5]], [char_encodings[4]], [char_encodings[6]], [char_encodings[3]], [char_encodings[7]]])  # ' hello world'
+y_train = torch.tensor([char_encodings[1], char_encodings[2], char_encodings[3], char_encodings[3], char_encodings[4], char_encodings[0], 
+                        char_encodings[5], char_encodings[4], char_encodings[6], char_encodings[3], char_encodings[7], char_encodings[0]])  # 'hello world '
 
 model = LongShortTermMemoryModel(encoding_size)
 
 optimizer = torch.optim.RMSprop(model.parameters(), 0.001)
-for epoch in range(1000):
+for epoch in range(500):
     model.reset()
     model.loss(x_train, y_train).backward()
     optimizer.step()
