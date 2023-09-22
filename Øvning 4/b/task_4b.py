@@ -80,19 +80,25 @@ model = LongShortTermMemoryModel(encoding_size)
 
 optimizer = torch.optim.RMSprop(model.parameters(), 0.001)
 for epoch in range(500):
-    model.reset()
-    model.loss(x_train, y_train).backward()
-    optimizer.step()
-    optimizer.zero_grad()
-
-    if epoch % 10 == 9:
-        # Generate characters from the initial characters ' h'
+    for i in range(x_train.size()[0]):
         model.reset()
-        text = ' h'
-        model.f(torch.tensor([[char_encodings[0]]]))
-        y = model.f(torch.tensor([[char_encodings[1]]]))
-        text += index_to_char[y.argmax(1)]
-        for c in range(50):
-            y = model.f(torch.tensor([[char_encodings[y.argmax(1)]]]))
-            text += index_to_char[y.argmax(1)]
-        print(text)
+        model.loss(x_train[i], y_train[i]).backward()
+        optimizer.step()
+        optimizer.zero_grad()
+
+def generate_emoji(string):
+    y = -1
+    model.reset()
+    for i in range(len(string)):
+        char_index = index_to_char.index(string[i])
+        y = model.f(torch.tensor([[char_encodings[char_index]]], dtype=torch.float))
+    return(index_to_emoji[y.argmax(0)])
+
+print("\n---Testing for all letters---")
+for letter in range(1, len(index_to_char)-1):
+    text = index_to_char[letter]
+    print(f"{text} : {generate_emoji(text)}")
+
+print("\n---rt & rats---")
+print(f"rt   : {generate_emoji('rt')}")
+print(f"rats : {generate_emoji('rats')}")
