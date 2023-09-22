@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torch.nn as nn
 
@@ -37,27 +38,11 @@ index_to_emoji =[value for _,value in emojis.items()]
 
 index_to_char = [' ', 'h', 'a', 't', 'r','c', 'f', 'l', 'm', 'p', 's', 'o', 'n']
 
-char_encodings = [
-    [1., 0., 0., 0., 0., 0., 0., 0.,],  # 0: ' '
-    [0., 1., 0., 0., 0., 0., 0., 0.,],  # 1: 'h'
-    [0., 0., 1., 0., 0., 0., 0., 0.,],  # 2: 'e'
-    [0., 0., 0., 1., 0., 0., 0., 0.,],  # 3: 'l'
-    [0., 0., 0., 0., 1., 0., 0., 0.,],  # 4: 'o'
-    [0., 0., 0., 0., 0., 1., 0., 0.,],  # 5: 'w'
-    [0., 0., 0., 0., 0., 0., 1., 0.,],  # 6: 'r'
-    [0., 0., 0., 0., 0., 0., 0., 1.,],  # 7: 'd'
-]
-
-emojies = [
-    [1., 0., 0., 0., 0., 0., 0., 0.,],  # 0: ' '
-    [0., 1., 0., 0., 0., 0., 0., 0.,],  # 1: 'h'
-    [0., 0., 1., 0., 0., 0., 0., 0.,],  # 2: 'e'
-    [0., 0., 0., 1., 0., 0., 0., 0.,],  # 3: 'l'
-    [0., 0., 0., 0., 1., 0., 0., 0.,],  # 4: 'o'
-    [0., 0., 0., 0., 0., 1., 0., 0.,],  # 5: 'w'
-    [0., 0., 0., 0., 0., 0., 1., 0.,],  # 6: 'r'
-    [0., 0., 0., 0., 0., 0., 0., 1.,],  # 7: 'd'
-]
+# Using this is so much simpler than making the ararys directly
+char_encodings = np.eye(len(index_to_char))
+encoding_size = len(char_encodings)
+emojies = np.eye(len(emojis))
+emoji_encoding_size=len(emojies)
 
 encoding_size = len(char_encodings)
 emoji_encoding_size=len(emojies)
