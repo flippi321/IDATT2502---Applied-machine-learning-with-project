@@ -92,7 +92,7 @@ def generate_emoji(string):
     for i in range(len(string)):
         char_index = index_to_char.index(string[i])
         y = model.f(torch.tensor([[char_encodings[char_index]]], dtype=torch.float))
-    return(index_to_emoji[y.argmax(0)])
+    return(index_to_emoji[y.argmax(1)]) # 0th element doesn't work
 
 print("\n---Testing for all letters---")
 for letter in range(1, len(index_to_char)-1):
