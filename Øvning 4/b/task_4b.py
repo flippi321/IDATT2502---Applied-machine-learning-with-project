@@ -1,9 +1,7 @@
 import torch
 import torch.nn as nn
 
-
 class LongShortTermMemoryModel(nn.Module):
-
     def __init__(self, encoding_size):
         super(LongShortTermMemoryModel, self).__init__()
 
@@ -25,6 +23,19 @@ class LongShortTermMemoryModel(nn.Module):
     def loss(self, x, y):  # x shape: (sequence length, batch size, encoding size), y shape: (sequence length, encoding size)
         return nn.functional.cross_entropy(self.logits(x), y.argmax(1))
 
+emojis = {
+    'hat': '\U0001F3A9',
+    'rat': '\U0001F400',
+    'cat': '\U0001F408',
+    'flat': '\U0001F3E2',
+    'matt': '\U0001F468',
+    'cap': '\U0001F9E2',
+    'son': '\U0001F466'
+}
+
+index_to_emoji =[value for _,value in emojis.items()]
+
+index_to_char = [' ', 'h', 'a', 't', 'r','c', 'f', 'l', 'm', 'p', 's', 'o', 'n']
 
 char_encodings = [
     [1., 0., 0., 0., 0., 0., 0., 0.,],  # 0: ' '
@@ -36,9 +47,22 @@ char_encodings = [
     [0., 0., 0., 0., 0., 0., 1., 0.,],  # 6: 'r'
     [0., 0., 0., 0., 0., 0., 0., 1.,],  # 7: 'd'
 ]
-encoding_size = len(char_encodings)
 
-index_to_char = [' ', 'h', 'e', 'l', 'o', 'w', 'r', 'd']
+emojies = [
+    [1., 0., 0., 0., 0., 0., 0., 0.,],  # 0: ' '
+    [0., 1., 0., 0., 0., 0., 0., 0.,],  # 1: 'h'
+    [0., 0., 1., 0., 0., 0., 0., 0.,],  # 2: 'e'
+    [0., 0., 0., 1., 0., 0., 0., 0.,],  # 3: 'l'
+    [0., 0., 0., 0., 1., 0., 0., 0.,],  # 4: 'o'
+    [0., 0., 0., 0., 0., 1., 0., 0.,],  # 5: 'w'
+    [0., 0., 0., 0., 0., 0., 1., 0.,],  # 6: 'r'
+    [0., 0., 0., 0., 0., 0., 0., 1.,],  # 7: 'd'
+]
+
+encoding_size = len(char_encodings)
+emoji_encoding_size=len(emojies)
+
+index_to_char = [' ', 'h', 'a', 't', 'r','c', 'f', 'l', 'm', 'p', 's', 'o', 'n']
 
 x_train = torch.tensor([[char_encodings[0]], [char_encodings[1]], [char_encodings[2]], [char_encodings[3]], [char_encodings[3]], [char_encodings[4]], [char_encodings[0]], 
                         [char_encodings[5]], [char_encodings[4]], [char_encodings[6]], [char_encodings[3]], [char_encodings[7]]])  # ' hello world'
