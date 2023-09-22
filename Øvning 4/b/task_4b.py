@@ -47,12 +47,34 @@ emoji_encoding_size=len(emojies)
 encoding_size = len(char_encodings)
 emoji_encoding_size=len(emojies)
 
-index_to_char = [' ', 'h', 'a', 't', 'r','c', 'f', 'l', 'm', 'p', 's', 'o', 'n']
 
-x_train = torch.tensor([[char_encodings[0]], [char_encodings[1]], [char_encodings[2]], [char_encodings[3]], [char_encodings[3]], [char_encodings[4]], [char_encodings[0]], 
-                        [char_encodings[5]], [char_encodings[4]], [char_encodings[6]], [char_encodings[3]], [char_encodings[7]]])  # ' hello world'
-y_train = torch.tensor([char_encodings[1], char_encodings[2], char_encodings[3], char_encodings[3], char_encodings[4], char_encodings[0], 
-                        char_encodings[5], char_encodings[4], char_encodings[6], char_encodings[3], char_encodings[7], char_encodings[0]])  # 'hello world '
+letters ={}
+
+for i, letter in enumerate(index_to_char):
+        letters[letter] = char_encodings[i]
+
+
+x_train = torch.tensor([
+        [[letters['h']], [letters['a']], [letters['t']], [letters[' ']]],
+        [[letters['r']], [letters['a']], [letters['t']], [letters[' ']]],
+        [[letters['c']], [letters['a']], [letters['t']], [letters[' ']]],
+        [[letters['f']], [letters['l']], [letters['a']], [letters['t']]],
+        [[letters['m']], [letters['a']], [letters['t']], [letters['t']]],
+        [[letters['c']], [letters['a']], [letters['p']], [letters[' ']]],
+        [[letters['s']], [letters['o']], [letters['n']], [letters[' ']]],
+        ], 
+        dtype=torch.float)
+
+
+y_train = torch.tensor([
+        [emojies[0], emojies[0], emojies[0], emojies[0]] ,
+        [emojies[1], emojies[1], emojies[1], emojies[1]],
+        [emojies[2], emojies[2], emojies[2], emojies[2]],
+        [emojies[3], emojies[3], emojies[3], emojies[3]],
+        [emojies[4], emojies[4], emojies[4], emojies[4]],
+        [emojies[5], emojies[5], emojies[5], emojies[5]],
+        [emojies[6], emojies[6], emojies[6], emojies[6]]], 
+        dtype=torch.float)
 
 model = LongShortTermMemoryModel(encoding_size)
 
