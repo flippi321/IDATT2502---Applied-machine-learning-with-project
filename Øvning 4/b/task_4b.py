@@ -47,7 +47,6 @@ emoji_encoding_size=len(emojies)
 encoding_size = len(char_encodings)
 emoji_encoding_size=len(emojies)
 
-
 letters ={}
 
 for i, letter in enumerate(index_to_char):
@@ -92,13 +91,12 @@ def generate_emoji(string):
     for i in range(len(string)):
         char_index = index_to_char.index(string[i])
         y = model.f(torch.tensor([[char_encodings[char_index]]], dtype=torch.float))
-    return(index_to_emoji[y.argmax(1)]) # 0th element doesn't work
+    return(index_to_emoji[y.argmax(1)]) # 
 
-print("\n---Testing for all letters---")
-for letter in range(1, len(index_to_char)-1):
-    text = index_to_char[letter]
-    print(f"{text} : {generate_emoji(text)}")
+print("\n---Testing all words ---")
+for i in ['hat', 'rat', 'cat', 'flat', 'matt', 'cap', 'son']:
+    print(f"{i} : {generate_emoji(i)}")
 
 print("\n---rt & rats---")
-print(f"rt   : {generate_emoji('rt')}")
-print(f"rats : {generate_emoji('rats')}")
+for i in ["rt", "rats", "caps"]:
+    print(f"{i} : {generate_emoji(i)}")
